@@ -5,6 +5,7 @@ import AddTask from "./components/AddTask";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
+  const [showAddTask, setShowAddTask] = useState(true);
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -45,10 +46,27 @@ const App = () => {
     );
   };
 
+  //Add Task
+  const addTask = (task) => {
+    var id = 0;
+    if (tasks.length != 0) {
+      id = tasks[tasks.length - 1].id + 1;
+    } else {
+      id = 1;
+    }
+    const newTask = { id, ...task };
+    setTasks([...tasks, newTask]);
+  };
   return (
-    <div id="appFrame" className="container mt-3 p-3 bg-primary text-light">
-      <Header />
-      <AddTask />
+    <div
+      id="appFrame"
+      className="container card mt-3 p-3 bg-primary text-light"
+    >
+      <Header
+        onAdd={() => setShowAddTask(!showAddTask)}
+        showAdd={showAddTask}
+      />
+      {showAddTask && <AddTask onAdd={addTask} />}
       {tasks.length > 0 ? (
         <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />
       ) : (
